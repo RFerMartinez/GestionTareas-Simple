@@ -9,11 +9,14 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item px-3">
-                    <a href="{% url 'logout' %}" class="btn btn-primary">LogOUT</a>
+                    <a href="{% url 'logout' %}" class="btn btn-secondary">Cerrar Sesion</a>
                 </li>
             {% else %}
                 <li class="nav-item px-3">
-                    <a href="{% url 'signup' %}" class="btn btn-primary">SingUP</a>
+                    <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesion</a>
+                </li>
+                <li class="nav-item px-3">
+                    <a href="{% url 'signup' %}" class="btn btn-secondary">Registrarse</a>
                 </li>
             {% endif %}
         </ul>

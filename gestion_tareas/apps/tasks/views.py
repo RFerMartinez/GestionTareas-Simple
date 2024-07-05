@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from django.contrib.auth.models import User
 
 # Función para crear una cookie
-from django.contrib.auth import login as login_django, logout as logout_django
+from django.contrib.auth import login as login_django, logout as logout_django, authenticate
 # Estas cooki me van a servir para obtener los datos del usuario, para saber si 'x tarea' fue
 # creada por ese usuario, o si el usuario tiene acceso a determinadas páginas
 
@@ -49,6 +49,25 @@ def tasks(request):
 def logout(request):
     logout_django(request)
     return redirect('home')
+
+def login(request):
+    if request.method == 'GET':
+        return render(request, 'signin.html', {
+            'form': AuthenticationForm()
+        })
+    else:
+        # Devuelve un usuario si es válido
+        user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
+
+        if user is None:
+            return render(request, 'signin.html', {
+                'form': AuthenticationForm(),
+                'error': "Usuario y/o contraseña incorrectos",
+            })
+        else:
+            login_django(request, user)
+            return redirect('tasks:tasks_home')
+
 
 
 

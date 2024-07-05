@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout, name='logout'),
+    path('signin/', views.login, name='login'),
 
     # INCLUDE app 'tasks'
     path('tasks/', include('apps.tasks.urls')),
