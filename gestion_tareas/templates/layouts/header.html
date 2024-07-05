@@ -1,0 +1,21 @@
+<header>
+    <nav>
+        <ul>
+            <li>
+                <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li>
+                <a href="{% url 'tasks:tasks_home' %}">Tasks</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li>
+                    <a href="#" class="btn btn-primary disabled">LogOUT</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'signup' %}">SingUP</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
