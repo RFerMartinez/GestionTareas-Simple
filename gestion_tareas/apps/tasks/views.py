@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 # Función para crear una cookie
-from django.contrib.auth import login as login_django
+from django.contrib.auth import login as login_django, logout as logout_django
 # Estas cooki me van a servir para obtener los datos del usuario, para saber si 'x tarea' fue
 # creada por ese usuario, o si el usuario tiene acceso a determinadas páginas
 
@@ -45,7 +45,10 @@ def signup(request):
 
 def tasks(request):
     return render(request, 'tasks/tasks.html')
-    
+
+def logout(request):
+    logout_django(request)
+    return redirect('home')
 
 
 
