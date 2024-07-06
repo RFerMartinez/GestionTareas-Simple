@@ -12,6 +12,9 @@ from django.contrib.auth import login as login_django, logout as logout_django, 
 
 from django.db import IntegrityError
 
+# Importar el formulario de Task
+from .forms import TaskForm
+
 def home(request):
     return render(request, 'home.html')
 
@@ -45,6 +48,19 @@ def signup(request):
 
 def tasks(request):
     return render(request, 'tasks/tasks.html')
+
+def crear_tarea(request):
+    if request.method == 'GET':
+        ctx = {
+            'form': TaskForm
+        }
+        return render(request, 'tasks/crear_tarea.html', ctx)
+    else:
+        print(request.POST)
+        ctx = {
+            'form': TaskForm
+        }
+        return render(request, 'tasks/crear_tarea.html', ctx)
 
 def logout(request):
     logout_django(request)

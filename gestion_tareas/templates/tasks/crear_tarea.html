@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block contenido %}
+
+    <h1>Crear tarea</h1>
+
+    <form action="" method="POST"> {% csrf_token %}
+        {{ form.as_p }}
+        <button>
+            Save
+        </button>
+    </form>
+
+{% endblock %}
