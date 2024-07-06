@@ -15,6 +15,8 @@ from django.db import IntegrityError
 # Importar el formulario de Task
 from .forms import TaskForm
 
+from .models import Task
+
 def home(request):
     return render(request, 'home.html')
 
@@ -47,7 +49,11 @@ def signup(request):
         })
 
 def tasks(request):
-    return render(request, 'tasks/tasks.html')
+    tareas = Task.objects.filter(user=request.user, fecha_completado__isnull=True)
+    ctx = {
+        'tareas': tareas
+    }
+    return render(request, 'tasks/tasks.html', ctx)
 
 def crear_tarea(request):
     if request.method == 'GET':
