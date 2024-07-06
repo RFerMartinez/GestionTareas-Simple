@@ -56,13 +56,26 @@ def tasks(request):
     return render(request, 'tasks/tasks.html', ctx)
 
 def detalle_tarea(request, id_de_tarea):
-    # tarea = Task.objects.get(id=id_de_tarea)
-    tarea = get_object_or_404(Task, id=id_de_tarea)
-    ctx = {
-        'id_tarea': id_de_tarea,
-        'tarea': tarea
-    }
-    return render(request, 'tasks/detalle_de_tarea.html', ctx)
+    if request.method == 'GET':
+        # tarea = Task.objects.get(id=id_de_tarea)
+        tarea = get_object_or_404(Task, id=id_de_tarea, user=request.user)
+
+        form = TaskForm(instance=tarea)
+        ctx = {
+            'id_tarea': id_de_tarea,
+            'tarea': tarea,
+            'form':form,
+        }
+        return render(request, 'tasks/detalle_de_tarea.html', ctx)
+    else:
+        try:
+            tarea = get_object_or_404(Task, id=id_de_tarea, user=request.user)
+            form = TaskForm(request.POST, instance=tarea) # 'instance=tarea' quiere decir que rellena el form con los datos de la tarea para poder actualizarlos
+            form.save()
+            return redirect('tasks:tasks_home')
+        except ValueError:
+            return HttpResponse("Error")
+
 
 def crear_tarea(request):
     if request.method == 'GET':
