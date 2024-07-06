@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -54,6 +54,15 @@ def tasks(request):
         'tareas': tareas
     }
     return render(request, 'tasks/tasks.html', ctx)
+
+def detalle_tarea(request, id_de_tarea):
+    # tarea = Task.objects.get(id=id_de_tarea)
+    tarea = get_object_or_404(Task, id=id_de_tarea)
+    ctx = {
+        'id_tarea': id_de_tarea,
+        'tarea': tarea
+    }
+    return render(request, 'tasks/detalle_de_tarea.html', ctx)
 
 def crear_tarea(request):
     if request.method == 'GET':
