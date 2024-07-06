@@ -56,11 +56,23 @@ def crear_tarea(request):
         }
         return render(request, 'tasks/crear_tarea.html', ctx)
     else:
-        print(request.POST)
-        ctx = {
-            'form': TaskForm
-        }
-        return render(request, 'tasks/crear_tarea.html', ctx)
+        try:
+            # GUARDAR LOS DATOS
+            # print(request.POST)
+            form = TaskForm(request.POST) # devuelve un html (o crea un formulario) con los datos ingresados desde el front
+            print(form)
+            nueva_tarea = form.save(commit=False)
+            nueva_tarea.user = request.user
+            nueva_tarea.save()
+            
+            print(nueva_tarea)
+            return redirect('tasks:tasks_home')
+        except:
+            ctx = {
+            'form': TaskForm,
+            'error': "ingresa los datos correcto"
+            }
+            return render(request, 'tasks/crear_tarea.html', ctx)
 
 def logout(request):
     logout_django(request)
