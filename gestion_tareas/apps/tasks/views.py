@@ -11,6 +11,7 @@ from django.contrib.auth import login as login_django, logout as logout_django, 
 # creada por ese usuario, o si el usuario tiene acceso a determinadas páginas
 
 from django.db import IntegrityError
+from django.utils import timezone
 
 # Importar el formulario de Task
 from .forms import TaskForm
@@ -49,6 +50,7 @@ def signup(request):
         })
 
 def tasks(request):
+    # Filtro las tareas por el usuario que hace el request, y filtro por aquellas tareas que no tengan fecha de completado
     tareas = Task.objects.filter(user=request.user, fecha_completado__isnull=True)
     ctx = {
         'tareas': tareas
@@ -76,6 +78,27 @@ def detalle_tarea(request, id_de_tarea):
         except ValueError:
             return HttpResponse("Error")
 
+def completar_tarea(request, id_de_tarea):
+    # Primeramente hay que buscar una tarea
+    tarea = get_object_or_404(Task, id=id_de_tarea, user=request.user)
+
+    # operacion/lógica con la tarea
+    if request.method == 'POST':
+        # agregarle una fecha de completado
+        tarea.fecha_completado = timezone.now()
+        #guardar tarea
+        tarea.save()
+        return redirect('tasks:tasks_home')
+    
+def borrar_tarea(request, id_de_tarea):
+    # Primeramente hay que buscar una tarea
+    tarea = get_object_or_404(Task, id=id_de_tarea, user=request.user)
+
+    # operacion/lógica con la tarea
+    if request.method == 'POST':
+        # eliminar la tarea encontrada
+        tarea.delete()
+        return redirect('tasks:tasks_home')
 
 def crear_tarea(request):
     if request.method == 'GET':

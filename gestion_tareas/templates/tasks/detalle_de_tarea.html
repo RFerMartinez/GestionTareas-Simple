@@ -7,8 +7,21 @@
 
     <form action="" method="POST"> {% csrf_token %}
         {{ form.as_p }}
-        <button>
+        <button class="btn btn-primary mb-4">
             Actualizar
+        </button>
+    </form>
+
+    <!--El identificado se lo paso por contexto, desde la url para mostrar detalle-->
+    <form action="{% url 'tasks:completar_tarea' tarea.id %}" method="POST"> {% csrf_token %}
+        <button class="btn btn-primary mb-4">
+            Tarea completada
+        </button>
+    </form>
+
+    <form action="{% url 'tasks:borrar_tarea' tarea.id %}" method="POST"> {% csrf_token %}
+        <button class="btn btn-primary">
+            ELIMINAR
         </button>
     </form>
 
