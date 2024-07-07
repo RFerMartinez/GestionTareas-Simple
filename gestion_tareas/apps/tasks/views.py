@@ -57,6 +57,17 @@ def tasks(request):
     }
     return render(request, 'tasks/tasks.html', ctx)
 
+def tareas_completadas(request):
+    tareas_completadas = Task.objects.filter(user=request.user, fecha_completado__isnull=False)
+    print(type(tareas_completadas))
+    print(tareas_completadas.count())
+    cantidad = tareas_completadas.count()
+    ctx = {
+        'tareas_comlpetadas': tareas_completadas,
+        'cantidad': cantidad,
+    }
+    return render(request, 'tasks/tareas_completadas.html', ctx)
+
 def detalle_tarea(request, id_de_tarea):
     if request.method == 'GET':
         # tarea = Task.objects.get(id=id_de_tarea)

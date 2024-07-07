@@ -1,0 +1,30 @@
+{% extends 'layouts/base.html' %}
+
+{% block contenido %}
+
+    <div class="container">
+        <div class="row">
+            <h1>Lista de tareas completadas ({{cantidad}})</h1>
+        </div>
+
+        <div class="row">
+            <div class="container">
+                <ul class="list-group list-group-flush">
+            
+                    {% for tarea in tareas_comlpetadas %}
+                        <li class="list-group-item {% if tarea.importante %}list-group-item-danger{% endif %}"" >
+                            <a href="{% url 'tasks:detalle_tarea' tarea.id %}">
+                                <p class="h1">{{tarea.titulo}}</p>
+                                <p class="h3">{{tarea.descripcion}}</p>
+                                <p class="h3">{{tarea.fecha_completado|date:'M j Y - H:i:s'}}</p>
+                                <p class="h3">{{tarea.user.username}}</p>
+                            </a>
+                        </li>
+                    {% endfor %}
+            
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
