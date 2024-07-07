@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import User
 
@@ -49,6 +50,7 @@ def signup(request):
             'error': "Las contraseñas no coinciden",
         })
 
+@login_required
 def tasks(request):
     # Filtro las tareas por el usuario que hace el request, y filtro por aquellas tareas que no tengan fecha de completado
     tareas = Task.objects.filter(user=request.user, fecha_completado__isnull=True)
@@ -57,6 +59,7 @@ def tasks(request):
     }
     return render(request, 'tasks/tasks.html', ctx)
 
+@login_required
 def tareas_completadas(request):
     tareas_completadas = Task.objects.filter(user=request.user, fecha_completado__isnull=False)
     print(type(tareas_completadas))
@@ -68,6 +71,7 @@ def tareas_completadas(request):
     }
     return render(request, 'tasks/tareas_completadas.html', ctx)
 
+@login_required
 def detalle_tarea(request, id_de_tarea):
     if request.method == 'GET':
         # tarea = Task.objects.get(id=id_de_tarea)
@@ -89,6 +93,7 @@ def detalle_tarea(request, id_de_tarea):
         except ValueError:
             return HttpResponse("Error")
 
+@login_required
 def completar_tarea(request, id_de_tarea):
     # Primeramente hay que buscar una tarea
     tarea = get_object_or_404(Task, id=id_de_tarea, user=request.user)
@@ -100,7 +105,8 @@ def completar_tarea(request, id_de_tarea):
         #guardar tarea
         tarea.save()
         return redirect('tasks:tasks_home')
-    
+
+@login_required
 def borrar_tarea(request, id_de_tarea):
     # Primeramente hay que buscar una tarea
     tarea = get_object_or_404(Task, id=id_de_tarea, user=request.user)
@@ -111,6 +117,7 @@ def borrar_tarea(request, id_de_tarea):
         tarea.delete()
         return redirect('tasks:tasks_home')
 
+@login_required
 def crear_tarea(request):
     if request.method == 'GET':
         ctx = {
@@ -136,6 +143,7 @@ def crear_tarea(request):
             }
             return render(request, 'tasks/crear_tarea.html', ctx)
 
+@login_required
 def logout(request):
     logout_django(request)
     return redirect('home')
